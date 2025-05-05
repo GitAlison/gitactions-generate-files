@@ -1,0 +1,52 @@
+name: Gerar CSV e fazer upload
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-csv:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar o repositório
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.13.1'
+
+      - name: Instalar dependências (se houver)
+        run: npm install || true
+
+      - name: Executar script para gerar CSV
+        run: node index.js
+
+      - name: Configurar Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com' 
+      - name: Verificar se o arquivo output.csv foi gerado
+        run: |
+          ls -la
+          if [ ! -f output.csv ]; then
+            echo "Erro: output.csv não encontrado!"
+            exit 1
+          fi
+      - name: Clonar o repositório de destino
+        uses: actions/checkout@v3
+        with:
+          repository: 'GitAlison/file-storage'
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          path: files
+
+      - name: Copiar CSV para o repositório de destino
+        run: |
+          cp output.csv files/relatorio.csv 
+
+      - name: Adicionar e fazer commit do CSV no repositório de destino
+        run: |
+          cd files
+          git add .
+          git commit -m "Adicionar CSV gerado automaticamente"
+          git push origin main  # Ou branch específica do repositório de destino

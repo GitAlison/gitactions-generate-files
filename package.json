@@ -1,0 +1,13 @@
+{
+  "name": "gitactions-generate-files",
+  "version": "1.0.0",
+  "main": "index.js",
+  "node": "22.13.1",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
