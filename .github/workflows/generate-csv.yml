@@ -49,4 +49,4 @@ jobs:
           cd files
           git add .
           git commit -m "Adicionar CSV gerado automaticamente"
-          git push origin main  # Ou branch específica do repositório de destino
+          git push origin main -f  # Ou branch específica do repositório de destino
